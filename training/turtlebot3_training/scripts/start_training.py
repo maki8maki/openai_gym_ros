@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import gym
 import numpy
@@ -29,7 +29,8 @@ if __name__ == '__main__':
     rospack = rospkg.RosPack()
     pkg_path = rospack.get_path('turtlebot3_training')
     outdir = pkg_path + '/training_results'
-    env = wrappers.Monitor(env, outdir, force=True)
+    # env = wrappers.Monitor(env, outdir, force=True)
+    # env = wrappers.RecordVideo(env, outdir)
     rospy.loginfo("Monitor Wrapper started")
 
     last_time_steps = numpy.ndarray(0)
@@ -76,7 +77,7 @@ if __name__ == '__main__':
             action = qlearn.chooseAction(state)
             rospy.logwarn("Next action is:%d", action)
             # Execute the action in the environment and get feedback
-            observation, reward, done, info = env.step(action)
+            observation, reward, done, _, info = env.step(action)
 
             rospy.logwarn(str(observation) + " " + str(reward))
             cumulated_reward += reward

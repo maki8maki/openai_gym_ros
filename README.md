@@ -13,11 +13,13 @@ https://www.theconstructsim.com/using-openai-ros/
 
 ```cd openai_gym_ros_ws/src```
 
-```git clone https://github.com/MiPa12/openai_gym_ros.git```
+```git clone https://github.com/maki8maki/openai_gym_ros.git```
+
+``` rosdep install --from-paths src --ignore-src -r -y ```
 
 **Specify of ros_ws_path**
 
-turtlebot2_willow_garage_params.yaml:
+training/turtlebot3_training/config/turtlebot3_world_params.yaml:
 
 ```ros_ws_abspath: "/home/USER/openai_gym_ros_ws" ```
 
@@ -29,37 +31,6 @@ source devel/setup.bash
 ```
 
 ### 2. Run examples 
-
-
-**Turtlebot2**
-
-<img src="./robots/img/rl_turtlebot2.png" width="200">
-
----
-
-Environment: willow_garage
-
-<img src="./robots/img/rl_willow_garage.png" width="200">
-
-```roslaunch turtlebot2_training start_training_willow_garage.launch```
-
----
-
-Environment: wall
-
-<img src="./robots/img/rl_wall.png" width="200">
-
-```roslaunch turtlebot2_training start_training_wall.launch```
-
----
-
-Environment: maze
-
-<img src="./robots/img/rl_maze.png" width="200">
-
-```roslaunch turtlebot2_training start_training_maze.launch```
-
----
 
 **Turtlebot3**
 
@@ -92,30 +63,30 @@ if  package_name == "turtlebot_gazebo":
 
 2. robot_envs
 
-- turtlebot2_env.py
+- turtlebot3_env.py
 
 Define path of your robot location:
 
 
 ```
-ROSLauncher(rospackage_name="turtlebot_gazebo",
+ROSLauncher(rospackage_name="turtlebot3_gazebo",
             launch_file_name="put_robot_in_world.launch",
             ros_ws_abspath=ros_ws_abspath)
 ```
 
 3. task_envs
 
-- turtlebot2_willow_garage.py
+- turtlebot3_world.py
 
 Define path of your environment location:
 
 ```
-ROSLauncher(rospackage_name="turtlebot_gazebo",
-            launch_file_name="willow_garage.launch",
+ROSLauncher(rospackage_name="turtlebot3_gazebo",
+            launch_file_name="start_world.launch",
             ros_ws_abspath=ros_ws_abspath)
 ```
 
-- turtlebot2_willow_garage.yaml
+- turtlebot3_world.yaml
 
 - task_envs_list.py
 
@@ -123,22 +94,22 @@ In this list you have to set your envrionment variable:
 
 
 ```
-elif task_env == 'MyTurtleBot2WillowGarage-v0':
-
+if task_env == 'TurtleBot3World-v0':
     register(
         id=task_env,
-        entry_point='openai_ros.task_envs.turtlebot2.turtlebot2_willow_garage:TurtleBot2WillowGarageEnv',
+        entry_point='openai_ros.task_envs.turtlebot3.turtlebot3_world:TurtleBot3WorldEnv',
         max_episode_steps=max_episode_steps,
     )
+
     # import our training environment
-    from openai_ros.task_envs.turtlebot2 import turtlebot2_willow_garage
+    from openai_ros.task_envs.turtlebot3 import turtlebot3_world
 ```
 
 Afterwards it also has to be set in the yaml file which is located in the trainings folder:
 
-turtlebot2_willow_garage_params.yaml:
+turtlebot3_world.yaml:
 
-```task_and_robot_environment_name: 'MyTurtleBot2WillowGarage-v0' ```
+```task_and_robot_environment_name: 'TurtleBot3World-v0' ```
 
 
 Structure openai_ros subfolder:
@@ -151,29 +122,29 @@ Structure openai_ros subfolder:
     ├── openai_ros_common.py
     ├── robot_envs
     │   ├── __init__.py
-    │   └── turtlebot2_env.py
+    │   └── turtlebot3_env.py
     ├── robot_gazebo_env.py
     └── task_envs
         ├── __init__.py
         ├── task_commons.py
         ├── task_envs_list.py
-        └── turtlebot2
+        └── turtlebot3
             ├── config
-            │   └── turtlebot2_willow_garage.yaml
+            │   └── turtlebot3_world.yaml
             ├── __init__.py
-            └── turtlebot2_willow_garage.py
+            └── turtlebot3_world.py
 ```
 
 Structure of trainings folder:
 
 ```
 └── training
-    └── turtlebot2_training
+    └── turtlebot3_training
         ├── CMakeLists.txt
         ├── config
-        │   └── turtlebot2_willow_garage_params.yaml
+        │   └── turtlebot3_world_.yaml
         ├── launch
-        │   └── start_training_willow_garage.launch
+        │   └── start_training_world.launch
         ├── package.xml
         └── scripts
             ├── qlearn.py

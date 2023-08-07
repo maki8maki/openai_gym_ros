@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 from gym.envs.registration import register
 from gym import envs
 
@@ -17,37 +17,7 @@ def RegisterOpenAI_Ros_Env(task_env, max_episode_steps=10000):
     result = True
 
     # Cubli Moving Cube
-    if task_env == 'TurtleBot2Maze-v0':
-
-        register(
-            id=task_env,
-            entry_point='openai_ros.task_envs.turtlebot2.turtlebot2_maze:TurtleBot2MazeEnv',
-            max_episode_steps=max_episode_steps,
-        )
-        # import our training environment
-        from openai_ros.task_envs.turtlebot2 import turtlebot2_maze
-
-    elif task_env == 'MyTurtleBot2Wall-v0':
-
-        register(
-            id=task_env,
-            entry_point='openai_ros.task_envs.turtlebot2.turtlebot2_wall:TurtleBot2WallEnv',
-            max_episode_steps=max_episode_steps,
-        )
-        # import our training environment
-        from openai_ros.task_envs.turtlebot2 import turtlebot2_wall
-
-    elif task_env == 'MyTurtleBot2WillowGarage-v0':
-
-        register(
-            id=task_env,
-            entry_point='openai_ros.task_envs.turtlebot2.turtlebot2_willow_garage:TurtleBot2WillowGarageEnv',
-            max_episode_steps=max_episode_steps,
-        )
-        # import our training environment
-        from openai_ros.task_envs.turtlebot2 import turtlebot2_willow_garage
-
-    elif task_env == 'TurtleBot3World-v0':
+    if task_env == 'TurtleBot3World-v0':
 
         register(
             id=task_env,
@@ -81,7 +51,7 @@ def GetAllRegisteredGymEnvs():
     return EX: ['Copy-v0', 'RepeatCopy-v0', 'ReversedAddition-v0', ... ]
     """
 
-    all_envs = envs.registry.all()
+    all_envs = envs.registry.values()
     env_ids = [env_spec.id for env_spec in all_envs]
 
     return env_ids

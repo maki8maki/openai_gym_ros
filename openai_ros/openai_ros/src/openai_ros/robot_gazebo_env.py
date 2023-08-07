@@ -66,10 +66,13 @@ class RobotGazeboEnv(gym.Env):
         info = {}
         reward = self._compute_reward(obs, done)
         self.cumulated_episode_reward += reward
+        
+        terminated = done
+        truncated = done
 
         rospy.logdebug("END STEP OpenAIROS")
 
-        return obs, reward, done, info
+        return obs, reward, terminated, truncated, info
 
     def reset(self):
         rospy.logdebug("Reseting RobotGazeboEnvironment")
