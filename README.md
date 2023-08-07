@@ -15,7 +15,7 @@ https://www.theconstructsim.com/using-openai-ros/
 
 ```git clone https://github.com/maki8maki/openai_gym_ros.git```
 
-``` rosdep install --from-paths src --ignore-src -r -y ```
+``` rosdep install --from-paths src --ignore-src -y ```
 
 **Specify of ros_ws_path**
 
