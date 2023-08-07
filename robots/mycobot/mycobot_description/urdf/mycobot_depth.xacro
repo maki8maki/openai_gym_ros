@@ -1,0 +1,457 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find mycobot_description)/urdf/common.xacro" />
+  <xacro:include filename="$(find mycobot_description)/urdf/color.xacro" />
+
+  <xacro:macro name="mycobot_robot" params="prefix parent *joint_origin">
+
+    <xacro:property name="mycobot_link_1" value="${prefix}link1" />
+    <xacro:property name="mycobot_link_2" value="${prefix}link2" />
+    <xacro:property name="mycobot_link_3" value="${prefix}link3" />
+    <xacro:property name="mycobot_link_4" value="${prefix}link4" />
+    <xacro:property name="mycobot_link_5" value="${prefix}link5" />
+    <xacro:property name="mycobot_link_6" value="${prefix}link6" />
+    <xacro:property name="mycobot_link_7" value="${prefix}link6_flange" />
+    <xacro:property name="mycobot_joint_1" value="${prefix}joint1" />
+    <xacro:property name="mycobot_joint_2" value="${prefix}joint2" />
+    <xacro:property name="mycobot_joint_3" value="${prefix}joint3" />
+    <xacro:property name="mycobot_joint_4" value="${prefix}joint4" />
+    <xacro:property name="mycobot_joint_5" value="${prefix}joint5" />
+    <xacro:property name="mycobot_joint_6" value="${prefix}joint6" />
+
+    <xacro:property name="joint_velocity_limit" value="1.0" />
+
+
+    <joint name="base_joint" type="fixed">
+      <xacro:insert_block name="joint_origin" />
+      <parent link="${parent}" />
+      <child link="${mycobot_link_1}" />
+    </joint>
+
+    <link name="${mycobot_link_1}">
+      <visual>
+        <geometry>
+          <mesh filename="package://mycobot_description/meshes/stl/visual/link1.stl" />
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <material name="white" />
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://mycobot_description/meshes/stl/collision/link1.stl" />
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+      </collision>
+      <inertial>
+        <origin xyz="0 0 0.035" rpy="0 0 0" />
+        <mass value="1.0" />
+        <xacro:cylinder_inertia m="1.0" r="0.05" h="0.07" />
+      </inertial>
+    </link>
+
+    <link name="${mycobot_link_2}">
+      <visual>
+        <geometry>
+          <mesh filename="package://mycobot_description/meshes/stl/visual/link2.stl" />
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <material name="white" />
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://mycobot_description/meshes/stl/collision/link2.stl" />
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+      </collision>
+      <inertial>
+        <origin xyz="0 0 0.060" rpy="0 0 0" />
+        <mass value="0.2" />
+        <xacro:cylinder_inertia m="0.2" r="0.05" h="0.08" />
+      </inertial>
+    </link>
+
+    <link name="${mycobot_link_3}">
+      <visual>
+        <geometry>
+          <mesh filename="package://mycobot_description/meshes/stl/visual/link3.stl" />
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <material name="white" />
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://mycobot_description/meshes/stl/collision/link3.stl" />
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+      </collision>
+      <inertial>
+        <origin xyz="0.01 0 0.06" rpy="0 0 0" />
+        <mass value="0.4" />
+        <xacro:cylinder_inertia m="0.4" r="0.05" h="0.155" />
+      </inertial>
+    </link>
+
+    <link name="${mycobot_link_4}">
+      <visual>
+        <geometry>
+          <mesh filename="package://mycobot_description/meshes/stl/visual/link4.stl" />
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <material name="white" />
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://mycobot_description/meshes/stl/collision/link4.stl" />
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+      </collision>
+      <inertial>
+        <origin xyz="-0.01 0 0.05" rpy="0 0 0" />
+        <mass value="0.4" />
+        <xacro:cylinder_inertia m="0.4" r="0.05" h="0.155" />
+      </inertial>
+    </link>
+
+    <link name="${mycobot_link_5}">
+      <visual>
+        <geometry>
+          <mesh filename="package://mycobot_description/meshes/stl/visual/link5.stl" />
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <material name="white" />
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://mycobot_description/meshes/stl/collision/link5.stl" />
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+      </collision>
+      <inertial>
+        <origin xyz="0 0 0.05" rpy="0 0 0" />
+        <mass value="0.2" />
+        <xacro:cylinder_inertia m="0.2" r="0.05" h="0.05" />
+      </inertial>
+    </link>
+
+    <link name="${mycobot_link_6}">
+      <visual>
+        <geometry>
+          <mesh filename="package://mycobot_description/meshes/stl/visual/link6.stl" />
+        </geometry>
+        <origin xyz="0 0 0 " rpy="0 0 0" />
+        <material name="white" />
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://mycobot_description/meshes/stl/collision/link6.stl" />
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+      </collision>
+      <inertial>
+        <origin xyz="0 0 0.037" rpy="0 0 0" />
+        <mass value="0.5" />
+        <xacro:cylinder_inertia m="0.5" r="0.05" h="0.06" />
+      </inertial>
+    </link>
+
+    <link name="${mycobot_link_7}">
+      <visual>
+        <geometry>
+          <cylinder length="0.005" radius="0.02" />
+        </geometry>
+        <origin xyz="0 0.0025 0" rpy="${M_PI/2} 0 0" />
+        <material name="white" />
+      </visual>
+      <collision>
+        <geometry>
+          <cylinder length="0.005" radius="0.02" />
+        </geometry>
+        <origin xyz="0 0.0025 0" rpy="${M_PI/2} 0 0" />
+      </collision>
+      <inertial>
+        <origin xyz="0 0.0025 0" rpy="${M_PI/2} 0 0" />
+        <mass value="0.1" />
+        <xacro:cylinder_inertia m="0.1" r="0.02" h="0.005" />
+      </inertial>
+    </link>
+
+    <link name="head_camera_link">
+      <pose>0 0 0.25 0 0 0</pose>
+      <collision name="collision">
+        <geometry>
+          <box size="0.023 0.042 0.042"/>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box size="0.023 0.042 0.042"/>
+        </geometry>
+        <material name="white" />
+      </visual>
+      <inertial>
+        <mass value="0.05" />
+        <xacro:box_inertia m="0.05" x="0.023" y="0.042" z="0.042" />
+      </inertial>
+    </link>
+
+    <!-- <gazebo reference="head_camera_link">
+      <sensor type="camera" name="head_camera">
+        <always_on>true</always_on>
+        <update_rate>30</update_rate>
+        <visualize>true</visualize>
+        <camera name="head_camera">
+          <horizontal_fov>1.518</horizontal_fov>
+          <image>
+            <format>R8G8B8</format>
+            <width>1280</width>
+            <height>720</height>
+          </image>
+          <clip>
+            <near>0.02</near>
+            <far>300</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+          <distortion>
+            <k1>-0.25</k1>
+            <k2>0.12</k2>
+            <k3>0.0</k3>
+            <p1>0.0</p1>
+            <p2>0.0</p2>
+            <center>0.5 0.5</center>
+          </distortion>
+        </camera>
+        <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+          <imageTopicName>/head_camera/image_raw</imageTopicName>
+          <cameraInfoTopicName>/head_camera/camera_info</cameraInfoTopicName>
+          <cameraName>camera1</cameraName>
+          <frameName>head_camera_link</frameName>
+          <updateRate>10.0</updateRate>
+          <CxPrime>0.0</CxPrime>
+          <Cx>0.0</Cx>
+          <Cy>0.0</Cy>
+          <focalLength>0.0</focalLength>
+          <hackBaseline>0.12</hackBaseline>
+          <distortionK1>0.05</distortionK1>
+          <distortionK2>-0.05</distortionK2>
+          <distortionK3>0.0</distortionK3>
+          <distortionT1>0.0</distortionT1>
+          <distortionT2>0.0</distortionT2>
+        </plugin>
+      </sensor>
+    </gazebo> -->
+
+    <gazebo reference="head_camera_link">
+      <sensor name="depth_camera" type="depth">
+        <always_on>true</always_on>
+        <update_rate>30</update_rate>
+        <visualize>false</visualize>
+        <camera>
+          <horizontal_fov>1.518</horizontal_fov>
+          <image>
+            <format>R8G8B8</format>
+            <width>1280</width>
+            <height>720</height>
+          </image>
+          <clip>
+            <near>0.02</near>
+            <far>0.5</far>
+          </clip>
+        </camera>
+        <plugin filename="libgazebo_ros_depth_camera.so" name="depth_camera_controller">
+          <imageTopicName>/depth_camera/color/image_raw</imageTopicName>
+          <cameraInfoTopicName>/depth_camera/color/camera_info</cameraInfoTopicName>
+          <pointCloudTopicName>/depth_camera/point</pointCloudTopicName>
+          <depthImageTopicName>/depth_camera/depth/image_raw</depthImageTopicName>
+          <depthImageCameraInfoTopicName>/depth_camera/depth/camera_info</depthImageCameraInfoTopicName>
+          <pointCloudCutoff>0.4</pointCloudCutoff>
+          <cameraName>camera2</cameraName>
+          <frameName>head_camera_link</frameName>
+          <updateRate>10.0</updateRate>
+          <CxPrime>0.0</CxPrime>
+          <Cx>0.0</Cx>
+          <Cy>0.0</Cy>
+          <focalLength>0.0</focalLength> <!-- use computed_focal_length -->
+          <hackBaseline>0.12</hackBaseline> <!-- use for P[3] -->
+          <distortionK1>0.05</distortionK1>
+          <distortionK2>-0.05</distortionK2>
+          <distortionK3>0.0</distortionK3>
+          <distortionT1>0.0</distortionT1>
+          <distortionT2>0.0</distortionT2>
+        </plugin>
+      </sensor>
+    </gazebo>
+
+    <joint name="${mycobot_joint_1}" type="revolute">
+      <axis xyz="0 0 1" />
+      <limit effort="10.0" lower="-${M_PI}" upper="${M_PI}" velocity="${joint_velocity_limit}" />
+      <parent link="${mycobot_link_1}" />
+      <child link="${mycobot_link_2}" />
+      <origin xyz="0 0 0.0706" rpy="0 0 0" />
+      <dynamics damping="1.0e-6" friction="2.0e-1" />
+    </joint>
+
+    <joint name="${mycobot_joint_2}" type="revolute">
+      <axis xyz="1 0 0" />
+      <limit effort="10.0" lower="-${M_PI}" upper="${M_PI}" velocity="${joint_velocity_limit}" />
+      <parent link="${mycobot_link_2}" />
+      <child link="${mycobot_link_3}" />
+      <origin xyz="0.03256 0 0.05976" rpy="0 0 0" />
+      <dynamics damping="1.0e-6" friction="2.0e-1" />
+    </joint>
+
+    <joint name="${mycobot_joint_3}" type="revolute">
+      <axis xyz="1 0 0" />
+      <limit effort="10.0" lower="-${M_PI}" upper="${M_PI}" velocity="${joint_velocity_limit}" />
+      <parent link="${mycobot_link_3}" />
+      <child link="${mycobot_link_4}" />
+      <origin xyz=" 0.00272 0 0.1104" rpy="0 0 0" />
+      <dynamics damping="1.0e-6" friction="2.0e-1" />
+    </joint>
+
+    <joint name="${mycobot_joint_4}" type="revolute">
+      <axis xyz="1 0 0" />
+      <limit effort="10.0" lower="-${M_PI}" upper="${M_PI}" velocity="${joint_velocity_limit}" />
+      <parent link="${mycobot_link_4}" />
+      <child link="${mycobot_link_5}" />
+      <origin xyz="-0.00164 0 0.096" rpy="0 0 0" />
+      <dynamics damping="1.0e-6" friction="2.0e-1" />
+    </joint>
+
+    <joint name="${mycobot_joint_5}" type="revolute">
+      <axis xyz="0 0 1" />
+      <limit effort="10.0" lower="-${M_PI}" upper="${M_PI}" velocity="${joint_velocity_limit}" />
+      <parent link="${mycobot_link_5}" />
+      <child link="${mycobot_link_6}" />
+      <origin xyz="0.0298 0 0.02876" rpy="0 0 0" />
+      <dynamics damping="1.0e-6" friction="2.0e-1" />
+    </joint>
+
+    <joint name="${mycobot_joint_6}" type="revolute">
+      <axis xyz="0 1 0" />
+      <limit effort="10.0" lower="-${M_PI}" upper="${M_PI}" velocity="${joint_velocity_limit}" />
+      <parent link="${mycobot_link_6}" />
+      <child link="${mycobot_link_7}" />
+      <origin xyz="0 0.0456 0.03792" rpy="0 0 0" />
+      <dynamics damping="1.0e-6" friction="2.0e-1" />
+    </joint>
+
+    <joint name="head_camera_joint" type="fixed">
+      <origin xyz="0 -0.01 0.042" rpy="0 0 1.5708" />
+      <parent link="${mycobot_link_7}"/>
+      <child  link="head_camera_link"/>
+    </joint>
+
+    <!-- for gazebo simulation -->
+
+    <xacro:if value="$(arg gazebo_plugin)">
+      <transmission name="${mycobot_joint_1}_trans">
+        <provideFeedback>true</provideFeedback>
+        <implicitSpringDamper>0</implicitSpringDamper>
+        <motorTorqueConstant>0.418</motorTorqueConstant>
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="${mycobot_joint_1}">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="${mycobot_joint_1}_motor">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+          <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+      </transmission>
+      <transmission name="${mycobot_joint_2}_trans">
+        <provideFeedback>true</provideFeedback>
+        <implicitSpringDamper>0</implicitSpringDamper>
+        <motorTorqueConstant>0.418</motorTorqueConstant>
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="${mycobot_joint_2}">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="${mycobot_joint_2}_motor">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+          <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+      </transmission>
+      <transmission name="${mycobot_joint_3}_trans">
+        <provideFeedback>true</provideFeedback>
+        <implicitSpringDamper>0</implicitSpringDamper>
+        <motorTorqueConstant>0.418</motorTorqueConstant>
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="${mycobot_joint_3}">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="${mycobot_joint_3}_motor">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+          <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+      </transmission>
+      <transmission name="${mycobot_joint_4}_trans">
+        <provideFeedback>true</provideFeedback>
+        <implicitSpringDamper>0</implicitSpringDamper>
+        <motorTorqueConstant>0.418</motorTorqueConstant>
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="${mycobot_joint_4}">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="${mycobot_joint_4}_motor">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+          <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+      </transmission>
+      <transmission name="${mycobot_joint_5}_trans">
+        <provideFeedback>true</provideFeedback>
+        <implicitSpringDamper>0</implicitSpringDamper>
+        <motorTorqueConstant>0.418</motorTorqueConstant>
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="${mycobot_joint_5}">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="${mycobot_joint_5}_motor">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+          <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+      </transmission>
+      <transmission name="${mycobot_joint_6}_trans">
+        <provideFeedback>true</provideFeedback>
+        <implicitSpringDamper>0</implicitSpringDamper>
+        <motorTorqueConstant>0.418</motorTorqueConstant>
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="${mycobot_joint_6}">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="${mycobot_joint_6}_motor">
+          <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+          <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+      </transmission>
+
+      <gazebo reference="${mycobot_link_1}">
+        <material>Gazebo/White</material>
+      </gazebo>
+
+      <gazebo reference="${mycobot_link_2}">
+        <material>Gazebo/White</material>
+      </gazebo>
+
+      <gazebo reference="${mycobot_link_3}">
+        <material>Gazebo/White</material>
+      </gazebo>
+
+      <gazebo reference="${mycobot_link_4}">
+        <material>Gazebo/White</material>
+      </gazebo>
+
+      <gazebo reference="${mycobot_link_5}">
+        <material>Gazebo/White</material>
+      </gazebo>
+
+      <gazebo reference="${mycobot_link_6}">
+        <material>Gazebo/White</material>
+      </gazebo>
+    </xacro:if>
+
+  </xacro:macro>
+</robot>
