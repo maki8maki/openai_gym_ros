@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+  <world name="Board">
+    <scene>
+      <shadows>0</shadows>
+    </scene>
+
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <gui>
+      <camera name="user_camera">
+        <pose>1.5 0.25 0.6 0 0.2 3.1415</pose>
+      </camera>
+    </gui>
+
+    <model name="connector">
+      <include>
+        <uri>model://connector</uri>
+      </include>
+      <pose>0.01 0.30 0.255 0 0 1.5708</pose>
+    </model>
+
+    <model name="board">
+      <include>
+        <uri>model://board</uri>
+      </include>
+      <pose>-0.03 0.30 0.25 0 0 0</pose>
+
+      <joint name='board_joint' type='fixed'>
+        <parent>board::link</parent>
+        <child>connector::link</child>
+      </joint>
+    </model>
+
+    <model name="cable1">
+      <pose>0 0.275 0.2505 0 0 0</pose>
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.017 0.05 0.001 0 0 0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="viusal">
+          <geometry>
+            <box>
+              <size>0.017 0.05 0.001 0 0 0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+
+    <model name="cable2">
+      <pose>0 0.2283 0.263 -0.5236 0 0</pose> <!-- 45deg -->
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.017 0.05 0.001 0 0 0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="viusal">
+          <geometry>
+            <box>
+              <size>0.017 0.05 0.001 0 0 0</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+
+    <model name="box">
+      <pose>0 0.40 0.125 0 0 0</pose>
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.2 0.2 0.25 0 0 0</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visusal">
+          <geometry>
+            <box>
+              <size>0.2 0.2 0.25 0 0 0</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>  0.40 0.40 0.40 1.0</ambient>
+            <diffuse>  0.40 0.40 0.40 1.0</diffuse>
+            <specular> 0.80 0.80 0.80 1.0</specular>
+          </material>
+        </visual>
+      </link>
+
+      <joint name='box_joint' type='fixed'>
+        <parent>box::link</parent>
+        <child>board::link</child>
+      </joint>
+    </model>
+
+    <model name="ground_plane">
+      <include>
+        <uri>model://ground_plane</uri>
+      </include>
+
+      <joint name='ground_joint' type='fixed'>
+        <parent>ground_plane::link</parent>
+        <child>box::link</child>
+      </joint>
+    </model>
+  </world>
+</sdf>
