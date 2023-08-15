@@ -1,0 +1,16 @@
+mycobot: #namespace
+
+    action_type: 'continuous' # set action types: continuous or discrete
+    n_actions: 6 # set the number of actions
+    position_lim: 0.1 # limit of difference of position [m]
+    orientation_lim: 10 # limit of difference of orientation [deg]
+
+    # Initial joint angles
+    init_angle_joint1: 0.0
+    init_angle_joint2: 0.0
+    init_angle_joint3: 0.0
+    init_angle_joint4: -30.0
+    init_angle_joint5: 0.0
+    init_angle_joint6: 0.0
+    
+    n_step: 20 # Number of steps that the robot can action

@@ -43,8 +43,8 @@ class MyCobotEnv(robot_gazebo_env.RobotGazeboEnv):
         # None in this case
 
         # We launch the ROSlaunch that spawns the robot into the world
-        ROSLauncher(rospackage_name="mycobot_gazebo",
-                    launch_file_name="mycobot_depth_with_emptyworld.launch",
+        ROSLauncher(rospackage_name="mycobot_moveit",
+                    launch_file_name="mycobot_moveit_gazebo.launch",
                     ros_ws_abspath=ros_ws_abspath)
 
         # Internal Vars
@@ -236,3 +236,13 @@ class MyCobotEnv(robot_gazebo_env.RobotGazeboEnv):
 
     def get_depth_img(self):
         return self.depth_image
+    
+    def get_pose(self):
+        ee_pose = self.move_group.get_current_pose().pose
+        ee_pos = np.array([ee_pose.position.x, ee_pose.position.y, ee_pose.position.z])
+        ee_eul = tf.transformations.euler_from_quaternion([ee_pose.orientations.x,
+                                                           ee_pose.orientations.y,
+                                                           ee_pose.orientations.z,
+                                                           ee_pose.orientations.w],
+                                                          axes='sxyz')
+        return np.concatenate([ee_pos, ee_eul])
