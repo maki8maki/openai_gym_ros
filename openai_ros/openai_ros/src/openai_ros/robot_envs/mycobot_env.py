@@ -212,6 +212,11 @@ class MyCobotEnv(robot_gazebo_env.RobotGazeboEnv):
         self.move_group.stop()
     
     def move_pose_goal(self, pose_goal):
+        """目標姿勢へ動かす
+
+        Args:
+            pose_goal (ndarray): 目標姿勢、前半3つが位置、後半3つがオイラー角（rad）
+        """
         rospy.logdebug("MyCobot Target Joint>> "+pose_goal.astype("str"))
         # エンドエフェクタの姿勢でゴール状態を指定
         movegroup_pose_goal = Pose()
