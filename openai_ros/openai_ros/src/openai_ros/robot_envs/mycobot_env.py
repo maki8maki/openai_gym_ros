@@ -246,3 +246,6 @@ class MyCobotEnv(robot_gazebo_env.RobotGazeboEnv):
                                                            ee_pose.orientations.w],
                                                           axes='sxyz')
         return np.concatenate([ee_pos, ee_eul])
+    
+    def get_angles(self):
+        return self.move_group.get_current_joint_values()

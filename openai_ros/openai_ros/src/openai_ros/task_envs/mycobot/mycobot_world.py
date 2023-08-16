@@ -1,10 +1,8 @@
 import rospy
 import numpy as np
-import tf
+from math import pi
 from gym import spaces
 from openai_ros.robot_envs import mycobot_env
-from gym.envs.registration import register
-from geometry_msgs.msg import Vector3
 from openai_ros.task_envs.task_commons import LoadYamlFileParamsTest
 from openai_ros.openai_ros_common import ROSLauncher
 import os
@@ -46,9 +44,13 @@ class MyCobotWorldEnv(mycobot_env.MyCobotEnv):
         self.n_actions = rospy.get_param('/mycobot/n_actions')
         self.pos_lim = rospy.get_param('/mycobot/position_lim')
         self.ori_lim = np.deg2rad(rospy.get_param('/mycobot/orientation_lim'))
-        low = np.array([-self.pos_lim, -self.pos_lim, -self.pos_lim, -self.ori_lim, -self.ori_lim, -self.ori_lim])
-        high = np.array([self.pos_lim, self.pos_lim, self.pos_lim, self.ori_lim, self.ori_lim, self.ori_lim])
-        self.action_space = spaces.Box(low=low, high=high)
+        a_low = np.array([-self.pos_lim, -self.pos_lim, -self.pos_lim, -self.ori_lim, -self.ori_lim, -self.ori_lim])
+        a_high = np.array([self.pos_lim, self.pos_lim, self.pos_lim, self.ori_lim, self.ori_lim, self.ori_lim])
+        self.action_space = spaces.Box(low=a_low, high=a_high)
+        
+        o_low = np.full(6, -pi)
+        o_high = np.full(6, pi)
+        self.observation_space = spaces.Box(low=o_low, high=o_high)
         
         rospy.logdebug("ACTION SPACES TYPE===>"+str(self.action_space))
 
@@ -108,7 +110,8 @@ class MyCobotWorldEnv(mycobot_env.MyCobotEnv):
         depth_img = self.get_depth_img()[:, :, np.newaxis]
         imgs = np.concatenate([rgb_img, depth_img], axis=2)
         pose = self.get_pose()
-        obs_dict = {'image': imgs, 'pose': pose}
+        angles = self.get_angles()
+        obs_dict = {'image': imgs, 'angles': angles}
         
         rospy.logdebug("END Get Observation ==>")
         return obs_dict
