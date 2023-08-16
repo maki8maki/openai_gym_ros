@@ -43,9 +43,9 @@ class MyCobotEnv(robot_gazebo_env.RobotGazeboEnv):
         # None in this case
 
         # We launch the ROSlaunch that spawns the robot into the world
-        ROSLauncher(rospackage_name="mycobot_moveit",
-                    launch_file_name="mycobot_moveit_gazebo.launch",
-                    ros_ws_abspath=ros_ws_abspath)
+        # ROSLauncher(rospackage_name="mycobot_moveit",
+        #             launch_file_name="mycobot_moveit_gazebo.launch",
+        #             ros_ws_abspath=ros_ws_abspath)
 
         # Internal Vars
         # Doesnt have any accesibles

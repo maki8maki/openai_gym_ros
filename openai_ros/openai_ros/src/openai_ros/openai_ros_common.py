@@ -37,7 +37,7 @@ def StartOpenAI_ROS_Environment(task_and_robot_environment_name):
 
 
 class ROSLauncher(object):
-    def __init__(self, rospackage_name, launch_file_name, ros_ws_abspath="/home/michaelpabst2/open_ai_gazebo_custom_model"):
+    def __init__(self, rospackage_name, launch_file_name, ros_ws_abspath="/home/yuki/openai_gym_ros_ws"):
 
         self._rospackage_name = rospackage_name
         self._launch_file_name = launch_file_name

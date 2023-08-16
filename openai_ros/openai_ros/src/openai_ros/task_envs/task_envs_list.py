@@ -30,6 +30,14 @@ def RegisterOpenAI_Ros_Env(task_env, max_episode_steps=10000):
 
 
     # Add here your Task Envs to be registered
+    elif task_env == 'MyCobotWorld-v0':
+        register(
+            id=task_env,
+            entry_point='openai_ros.task_envs.mycobot.mycobot_world:MyCobotWorldEnv',
+            max_episode_steps=max_episode_steps
+        )
+        
+        from openai_ros.task_envs.mycobot import mycobot_world
     else:
         result = False
 
