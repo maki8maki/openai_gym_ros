@@ -109,7 +109,6 @@ class MyCobotWorldEnv(mycobot_env.MyCobotEnv):
         rgb_img = self.get_rgb_img()
         depth_img = self.get_depth_img()[:, :, np.newaxis]
         imgs = np.concatenate([rgb_img, depth_img], axis=2)
-        pose = self.get_pose()
         angles = self.get_angles()
         obs_dict = {'image': imgs, 'angles': angles}
         
