@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from functools import reduce
 import gym
 import numpy
 import time
