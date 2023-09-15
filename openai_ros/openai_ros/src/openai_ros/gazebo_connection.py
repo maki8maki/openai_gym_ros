@@ -40,6 +40,7 @@ class GazeboConnection():
                     rospy.logdebug("PAUSING service calling...")
                     self.pause()
                     paused_done = True
+                    self.is_pause = True
                     rospy.logdebug("PAUSING service calling...DONE")
                 except rospy.ServiceException as e:
                     counter += 1
@@ -61,6 +62,7 @@ class GazeboConnection():
                     rospy.logdebug("UNPAUSING service calling...")
                     self.unpause()
                     unpaused_done = True
+                    self.is_pause = False
                     rospy.logdebug("UNPAUSING service calling...DONE")
                 except rospy.ServiceException as e:
                     counter += 1

@@ -62,17 +62,17 @@ class MyCobotEnv(robot_gazebo_env.RobotGazeboEnv):
                                             reset_world_or_sim="SIMULATION")
 
         self.gazebo.unpauseSim()
+        
+        self.bridge = CvBridge() # For RGB, Depth image
 
         self._check_all_sensors_ready()
-        
+
         moveit_commander.roscpp_initialize(sys.argv)
-        self.move_group = moveit_commander.MoveGroupCommander("mycobot_arm")
+        self.move_group = moveit_commander.MoveGroupCommander("mycobot_arm", wait_for_servers=0)
 
         # We Start all the ROS related Subscribers and publishers
-        self.bridge = CvBridge() # For RGB, Depth image
         rospy.Subscriber("/depth_camera/color/image_raw", Image, self._rgb_img_callback, queue_size=1)
         rospy.Subscriber("/depth_camera/depth/image_raw", Image, self._depth_img_callback, queue_size=1)
-
         # self._cmd_vel_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
 
         # self._check_publishers_connection()
@@ -109,8 +109,7 @@ class MyCobotEnv(robot_gazebo_env.RobotGazeboEnv):
         while self.rgb_image is None and not rospy.is_shutdown():
             try:
                 data = rospy.wait_for_message("/depth_camera/color/image_raw", Image, timeout=5.0)
-                input_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
-                self.rgb_image = cv2.cvtColor(input_image, cv2.BGR2RGB)
+                self._rgb_img_callback(data)
                 rospy.logdebug("Current /depth_camera/color/image_raw READY=>")
             except:
                 rospy.logerr("Current /depth_camera/color/image_raw not ready yet, retrying for getting rgb_img")
@@ -123,7 +122,7 @@ class MyCobotEnv(robot_gazebo_env.RobotGazeboEnv):
         while self.depth_image is None and not rospy.is_shutdown():
             try:
                 data = rospy.wait_for_message("/depth_camera/depth/image_raw", Image, timeout=5.0)
-                self.depth_image = self.bridge.imgmsg_to_cv2(data, "32FC1")
+                self._depth_img_callback(data)
                 rospy.logdebug("Current /depth_camera/depth/image_raw READY=>")
             except:
                 rospy.logerr("Current /depth_camera/depth/image_raw not ready yet, retrying for getting depth_img")
@@ -133,15 +132,15 @@ class MyCobotEnv(robot_gazebo_env.RobotGazeboEnv):
     def _rgb_img_callback(self, data):
         try:
             input_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
-            self.rgb_image = cv2.cvtColor(input_image, cv2.BGR2RGB)
+            self.rgb_image = cv2.cvtColor(input_image, cv2.COLOR_BGR2RGB)
         except CvBridgeError as e:
-            print(e)
+            rospy.logerr(e)
     
     def _depth_img_callback(self, data):
         try:
             self.depth_image = self.bridge.imgmsg_to_cv2(data, "32FC1")
         except CvBridgeError as e:
-            print(e)
+            rospy.logerr(e)
         
     def _check_publishers_connection(self):
         """
@@ -201,7 +200,8 @@ class MyCobotEnv(robot_gazebo_env.RobotGazeboEnv):
         Args:
             angle_goal_deg (ndarray): 目標関節角度、degree
         """
-        rospy.logdebug("MyCobot Target Joint>> "+angle_goal_deg.astype("str"))
+        rospy.logdebug("MyCobot Target Joint>> ")
+        rospy.logdebug(angle_goal_deg.astype("str"))
         # 関節の角度でゴール状態を指定
         self.move_group.set_joint_value_target(np.deg2rad(angle_goal_deg))
 
@@ -210,6 +210,7 @@ class MyCobotEnv(robot_gazebo_env.RobotGazeboEnv):
 
         # 後処理
         self.move_group.stop()
+        self.calc_pose_and_angles()
     
     def move_pose_goal(self, pose_goal):
         """目標姿勢へ動かす
@@ -217,7 +218,8 @@ class MyCobotEnv(robot_gazebo_env.RobotGazeboEnv):
         Args:
             pose_goal (ndarray): 目標姿勢、前半3つが位置、後半3つがオイラー角（rad）
         """
-        rospy.logdebug("MyCobot Target Joint>> "+pose_goal.astype("str"))
+        rospy.logdebug("MyCobot Target Pose>>")
+        rospy.logdebug(pose_goal.astype("str"))
         # エンドエフェクタの姿勢でゴール状態を指定
         movegroup_pose_goal = Pose()
         movegroup_pose_goal.position = Vector3(pose_goal[0], pose_goal[1], pose_goal[2])
@@ -230,6 +232,7 @@ class MyCobotEnv(robot_gazebo_env.RobotGazeboEnv):
 
         # 後処理
         self.move_group.stop()
+        self.calc_pose_and_angles()
 
     def get_rgb_img(self):
         return self.rgb_image
@@ -237,15 +240,20 @@ class MyCobotEnv(robot_gazebo_env.RobotGazeboEnv):
     def get_depth_img(self):
         return self.depth_image
     
+    def calc_pose_and_angles(self):
+        if not self.gazebo.is_pause:
+            ee_pose = self.move_group.get_current_pose().pose
+            ee_pos = np.array([ee_pose.position.x, ee_pose.position.y, ee_pose.position.z])
+            ee_eul = tf.transformations.euler_from_quaternion([ee_pose.orientation.x,
+                                                            ee_pose.orientation.y,
+                                                            ee_pose.orientation.z,
+                                                            ee_pose.orientation.w],
+                                                            axes='sxyz')
+            self.pose = np.concatenate([ee_pos, ee_eul])
+            self.angles = self.move_group.get_current_joint_values()
+    
     def get_pose(self):
-        ee_pose = self.move_group.get_current_pose().pose
-        ee_pos = np.array([ee_pose.position.x, ee_pose.position.y, ee_pose.position.z])
-        ee_eul = tf.transformations.euler_from_quaternion([ee_pose.orientations.x,
-                                                           ee_pose.orientations.y,
-                                                           ee_pose.orientations.z,
-                                                           ee_pose.orientations.w],
-                                                          axes='sxyz')
-        return np.concatenate([ee_pos, ee_eul])
+        return self.pose
     
     def get_angles(self):
-        return self.move_group.get_current_joint_values()
+        return self.angles

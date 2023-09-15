@@ -13,4 +13,4 @@ mycobot: #namespace
     init_angle_joint5: 0.0
     init_angle_joint6: 0.0
     
-    n_step: 20 # Number of steps that the robot can action
+    n_steps: 20 # Number of steps that the robot can action
