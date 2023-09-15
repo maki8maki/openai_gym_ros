@@ -1,21 +1,12 @@
 from collections import deque
-import random
 import numpy as np
-import torch
 import torch.nn as nn
-
-def set_seed(seed):
-    random.seed(seed)
-    np.random.seed(seed)
-    torch.manual_seed(seed)
-    torch.backends.cudnn.deterministic = True
-    torch.backends.cudnn.benchmark = False
-    if torch.cuda.is_available():
-        torch.cuda.manual_seed(seed)
-        torch.cuda.manual_seed_all(seed)
 
 def size_after_conv(h, ksize, stride=1, padding=0):
     return ((h - ksize + 2 * padding) // stride) + 1
+
+def size_after_pooling(h, ksize):
+    return h // ksize
 
 class Reshape(nn.Module):
     def __init__(self, shape):

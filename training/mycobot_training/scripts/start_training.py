@@ -4,6 +4,8 @@ from functools import reduce
 import numpy as np
 import time
 import cv2
+import torch
+from torchvision import transforms
 # ROS packages required
 import rospy
 import rospkg
@@ -14,7 +16,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from openai_ros.openai_ros_common import StartOpenAI_ROS_Environment
 from agents.comb import DCAE_DDPG
-from agents.utils import set_seed
+from utils import set_seed
 
 def state_resize(state, width, height):
     img = state["image"]
@@ -60,14 +62,26 @@ if __name__ == '__main__':
 
     # Initialises the algorithm that we are going to use for learning
     img_size = (img_height, img_width, 4)
-    agent = DCAE_DDPG(img_size, hidden_dim, env.observation_space, env.action_space, gamma, batch_size=batch_size, memory_size=memory_size)
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    print(device)
+    agent = DCAE_DDPG(img_size, hidden_dim, env.observation_space, 
+                      env.action_space, gamma, batch_size=batch_size, 
+                      memory_size=memory_size, device=device)
+    trans = transforms.Compose([
+        transforms.ToPILImage(),
+        transforms.Resize((img_height, img_width)),
+        transforms.ToTensor(),
+        transforms.Normalize(0.5, 0.5)
+    ])
 
     rospy.logwarn("Start Data Collection")   
     state = env.reset()
     for _ in range(memory_size):
+        # state["image"] = trans(state["image"]).numpy()
         state = state_resize(state, img_width, img_height)
         action = env.action_space.sample()
         next_state, reward, success, done, _ = env.step(action)
+        # next_state["image"] = trans(next_state["image"]).numpy()
         next_state = state_resize(next_state, img_width, img_height)
         transition = {
             'state': state,
@@ -78,7 +92,7 @@ if __name__ == '__main__':
             'done': int(done)
         }
         agent.ddpg.replay_buffer.append(transition)
-        state = env.reset() if done else next_state
+        state = env.reset() if success or done else next_state
     rospy.logwarn("Data Collected")    
         
     start_time = time.time()
