@@ -1,0 +1,17 @@
+mycobot: #namespace
+    task_and_robot_environment_name: 'MyCobotWorld-v0'
+    ros_ws_abspath: "/home/yuki/openai_gym_ros_ws"
+    running_step: 0.04 # amount of time the control will be executed
+    pos_step: 0.016     # increment in position for each command
+    
+    width: 128
+    height: 72
+
+    #NN parameters
+    hidden_dim: 20
+    gamma: 0.7
+    batch_size: 5
+    memory_size: 100
+    nepisodes: 500
+    nsteps: 10000
+    running_step: 0.06 # Time for each step
