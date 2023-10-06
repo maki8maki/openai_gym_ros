@@ -26,7 +26,7 @@ training/turtlebot3_training/config/turtlebot3_world_params.yaml:
 
 ```
 cd openai_gym_ros_ws
-catkin_make
+catkin build
 source devel/setup.bash
 ```
 
